@@ -91,14 +91,14 @@
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      var found = false;
+      var conflict = false;
       var self = this;
       _.each(this.attributes, function(v,i){
         if(self.hasRowConflictAt(i)){
-          found = true;
+          conflict = true;
         }
       });
-      return found; // fixme
+      return conflict; // fixme
     },
 
 
@@ -126,16 +126,16 @@
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      var found = false;
+      var conflict = false;
       //iterate through the callIndex of the board array
       //total colums = length of row[0]
       var columnCount = this.attributes[0].length;
       for(var i = 0; i < columnCount; i++){
         if (this.hasColConflictAt(i)) {
-          found = true;
+          conflict = true;
         }
       }
-      return found;
+      return conflict;
     },
 
 
@@ -145,12 +145,44 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      //if there is a value at index of the board, and there is a value in any of the below
+      //add one to boardindex and add one to rowindex and if there is a 1 there, then there
+      //is a conflict
+      //first run starting at rowindex = 0, columnindex <-majorDiago...
+      //check value
+        //add value to counter variable
+      //add 1 to rowindex and columnindex
+        //check values
+        //check if columnindex > column.length
+        //check if rowindex > row.length
+        //if greater than length, continue on
+        var rowLength = this.attributes.length;
+        var colLength = this.attributes[0].length;
+        var self = this;
+
+        var checkPos = function(rowIndex, columnIndex){
+          if(rowIndex >= rowLength || columnIndex >= colLength){
+            return 0;
+          }
+          var memo = self.attributes[rowIndex][columnIndex];
+          return memo + checkPos(rowIndex +1, columnIndex +1);
+        };
+      var count = checkPos(0,majorDiagonalColumnIndexAtFirstRow);
+        
+      return (count >= 2) ? true:false;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      //run hamdc on each column
+      var columnCount = this.attributes[0].length;
+      var conflict = false;
+      for(var i = 0; i < columnCount; i++){
+        if(this.hasMajorDiagonalConflictAt(i)){
+          conflict = true;
+        }
+      }
+      return conflict; // fixme
     },
 
 
@@ -160,12 +192,32 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var rowLength = this.attributes.length;
+      var self = this;
+
+      function checkPos(rowIndex, columnIndex){
+        //base case
+        if(rowIndex >= rowLength || columnIndex < 0){
+          return 0;
+        }
+        var memo = self.attributes[rowIndex][columnIndex];
+        return memo + checkPos(rowIndex+1, columnIndex - 1);
+      }
+
+      var count = checkPos(0, minorDiagonalColumnIndexAtFirstRow);
+      return (count >= 2) ? true:false;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var columnIndex = this.attributes[0].length -1;
+      var conflict = false;
+      for(var i =columnIndex; i >= 0; i--){
+        if(this.hasMinorDiagonalConflictAt(i)){
+          conflict = true;
+        }
+      }
+      return conflict;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
