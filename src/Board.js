@@ -79,12 +79,26 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      //row index, is the index number of the outermost array
+      //_.reduce on row index if output is greater than = 2 return true
+      //otherwise return false
+      var count = _.reduce(this.attributes[rowIndex], function(memo, value){
+        return memo+value;
+      }, 0);
+
+      return (count >= 2) ? true:false; // fixme
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var found = false;
+      var self = this;
+      _.each(this.attributes, function(v,i){
+        if(self.hasRowConflictAt(i)){
+          found = true;
+        }
+      });
+      return found; // fixme
     },
 
 
@@ -94,12 +108,34 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      //use _.pluck. iterate through each row look at value at colindex
+      var col = _.pluck(this.attributes, colIndex); //retuns [items @ colindex]
+      console.log(col + ": line 113");
+      //use _.reduce to count if 2 or greater on items in col
+      var count = _.reduce(col, function(memo, value){
+        //if value is a number
+        if(typeof value === 'number'){
+          return memo+value;
+        } 
+        return memo;
+
+      }, 0);
+      
+      return (count >= 2) ? true:false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var found = false;
+      //iterate through the callIndex of the board array
+      //total colums = length of row[0]
+      var columnCount = this.attributes[0].length;
+      for(var i = 0; i < columnCount; i++){
+        if (this.hasColConflictAt(i)) {
+          found = true;
+        }
+      }
+      return found;
     },
 
 
