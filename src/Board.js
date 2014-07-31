@@ -110,7 +110,7 @@
     hasColConflictAt: function(colIndex) {
       //use _.pluck. iterate through each row look at value at colindex
       var col = _.pluck(this.attributes, colIndex); //retuns [items @ colindex]
-      console.log(col + ": line 113");
+      //console.log(col + ": line 113");
       //use _.reduce to count if 2 or greater on items in col
       var count = _.reduce(col, function(memo, value){
         //if value is a number
@@ -156,7 +156,7 @@
         //check if columnindex > column.length
         //check if rowindex > row.length
         //if greater than length, continue on
-        var rowLength = this.attributes.length;
+        var rowLength = this.attributes.n;
         var colLength = this.attributes[0].length;
         var self = this;
 
@@ -164,6 +164,7 @@
           if(rowIndex >= rowLength || columnIndex >= colLength){
             return 0;
           }
+
           var memo = self.attributes[rowIndex][columnIndex];
           return memo + checkPos(rowIndex +1, columnIndex +1);
         };
@@ -192,7 +193,7 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      var rowLength = this.attributes.length;
+      var rowLength = this.attributes.n;
       var self = this;
 
       function checkPos(rowIndex, columnIndex){
