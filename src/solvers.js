@@ -33,9 +33,7 @@ window.backtrack = function(board, n, piece){
 
          for (var i = 0; i < board.attributes.n; i++) {
              matrix.push(board.attributes[i].slice());
-             console.log(matrix, "line 37");
          }
-        console.log(matrix, "line 39");
          solved.push(matrix);
       }
       return;
@@ -50,13 +48,11 @@ window.backtrack = function(board, n, piece){
         queenCheck = (conflict) ? false:true;
       }
       if(!board.hasColConflictAt(i) &&queenCheck){ 
-      //if false (no conflicts)
+        //if false (no conflicts)
         //set rook to this location board[depth][i]
-        
         //recurse, need to go one level deeper
         cursed(depth+1,n-1);
-        //set board[depth][i] back to 0
-        
+        //set board[depth][i] back to 0        
       }
       board.attributes[depth][i] = 0;
     }
@@ -78,29 +74,10 @@ window.boardMaker = function(n){
 };
 
 window.findNRooksSolution = function(n) {
-  //CHECK THIS!!
-
-  //var b = new Board(boardMaker(n));
+ var sol = backtrack(new Board({n:n}), n);
   
-  var solution = backtrack(new Board({n:n}), n).shift(); 
+  var solution = sol[0].shift(); 
 
-  //make new board nxn
-  //need to place n rooks as "1"
-  //create rook class ?
-    //assign row and col conflict functions ?
-      //place function ->
-        //calls row functions
-          //if true (conflict) go to next spot
-            //repeat
-          //if false (no conflict)
-            //place self
-              //move to next piece
-  //determine where first piece will go
-    //test all possible locations of other rooks
-  
-  //use board
-  //add rooks to matrix as "1" 's
-  //output matrix w/ no conflicts
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 };
@@ -109,7 +86,8 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = backtrack(new Board({n:n}), n).length;
+  var sol = backtrack(new Board({n:n}), n);
+  var solutionCount = sol[1];
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
@@ -119,8 +97,7 @@ window.countNRooksSolutions = function(n) {
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
   var sol = backtrack(new Board({n:n}), n, 'queen');
-  console.log(sol);
-  var solution = sol.shift();
+  var solution = sol[0].shift();
 
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
@@ -131,7 +108,7 @@ window.findNQueensSolution = function(n) {
 window.countNQueensSolutions = function(n) {
   var solution = backtrack(new Board({n:n}), n, 'queen');
   if(n === 5){
-    console.log('n = 5: ', JSON.stringify(solution[0]));
+    //console.log('n = 5: ', JSON.stringify(solution[0]));
   }
   var solutionCount = solution[1];
 
