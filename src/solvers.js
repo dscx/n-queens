@@ -12,30 +12,45 @@
 
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
-window.backtrack = function(board, n){
+window.backtrack = function(board, n, piece){
   var solved = [];
-  //n = rooks
+  //n = total pieces
 
   var results = {};
   var cursed = function(depth, n){
   //base case - no more rooks to place
+    var queenCheck; //checks if tests for queens passed
     if (n === 0) { 
       var matrix = [];
       //iterate over board.attributes
       //slice each row, and push into matrix
-      if(!board.hasAnyColConflicts() ){
-        for (var i = 0; i < board.attributes.n; i++) {
-            matrix.push(board.attributes[i].slice());
-        }
-        solved.push(matrix);
-      }    
+      queenCheck = true;
+      if(piece === 'queen'){
+        var conflict;
+        conflict = board.hasAnyMajorDiagonalConflicts() || board.hasAnyMinorDiagonalConflicts();
+        queenCheck = (conflict) ? false:true;
+      }
+      if(!board.hasAnyColConflicts() && queenCheck){
+
+         for (var i = 0; i < board.attributes.n; i++) {
+             matrix.push(board.attributes[i].slice());
+         }
+        
+         solved.push(matrix);
+      }
 
       return;
     }
-    //this for loop is not occuring
+
     for(var i=0; i < board.attributes[depth].length; i++){ //changed from board.attributed[depth].n
     //check for conflicts @ column [i]
-      if(!board.hasColConflictAt(i)){ 
+      queenCheck = true;
+      if(piece === 'queen'){
+        var conflict;
+        conflict = board.hasMajorDiagonalConflictAt(i) || board.hasMinorDiagonalConflictAt(i);
+        queenCheck = (conflict) ? false:true;
+      }
+      if(!board.hasColConflictAt(i) &&queenCheck){ 
       //if false (no conflicts)
         //set rook to this location board[depth][i]
         board.attributes[depth][i] = 1;
@@ -48,21 +63,23 @@ window.backtrack = function(board, n){
   };
   cursed(0, n);
   // console.log(solved, ': line');
-  return solved;
+  return (solved.length) ? [solved, solved.length]:[boardMaker(n), solved.length];
+};
+
+window.boardMaker = function(n){
+  var template = [];
+  for (var i =0; i < n; i++){
+      template[i] = [];
+      for (var j = 0; j < n; j++) {
+        template[i][j] = 0;
+      }
+  }
+  return template;
 };
 
 window.findNRooksSolution = function(n) {
   //CHECK THIS!!
-  // var boardMaker = function(n){
-  //   var template = [];
-  //   for (var i =0; i < n; i++){
-  //       template[i] = [];
-  //       for (var j = 0; j < n; j++) {
-  //         template[i][j] = 0;
-  //       }
-  //   }
-  //   return template;
-  // };
+
   //var b = new Board(boardMaker(n));
   
   var solution = backtrack(new Board({n:n}), n).shift(); 
@@ -101,7 +118,9 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  var sol = backtrack(new Board({n:n}), n, 'queen');
+  console.log(sol);
+  var solution = sol.shift();
 
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
@@ -110,7 +129,12 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solution = backtrack(new Board({n:n}), n, 'queen');
+  if(n === 3){
+    console.log('n = 3: ', JSON.stringify(solution[0]));
+  }
+  var solutionCount = solution[1];
+
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
