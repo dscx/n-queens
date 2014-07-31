@@ -43,6 +43,7 @@ window.backtrack = function(board, n, piece){
     for(var i=0; i < board.attributes.n; i++){ //changed from board.attributed[depth].n
     //check for conflicts @ column [i]
       queenCheck = true;
+      board.attributes[depth][i] = 1;
       if(piece === 'queen'){
         var conflict;
         conflict = board.hasMajorDiagonalConflictAt(i) || board.hasMinorDiagonalConflictAt(i);
@@ -51,12 +52,13 @@ window.backtrack = function(board, n, piece){
       if(!board.hasColConflictAt(i) &&queenCheck){ 
       //if false (no conflicts)
         //set rook to this location board[depth][i]
-        board.attributes[depth][i] = 1;
+        
         //recurse, need to go one level deeper
         cursed(depth+1,n-1);
         //set board[depth][i] back to 0
-        board.attributes[depth][i] = 0;
+        
       }
+      board.attributes[depth][i] = 0;
     }
   };
   cursed(0, n);
