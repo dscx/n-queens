@@ -129,7 +129,7 @@
       var conflict = false;
       //iterate through the callIndex of the board array
       //total colums = length of row[0]
-      var columnCount = this.attributes[0].length;
+      var columnCount = this.attributes.n;
       for(var i = 0; i < columnCount; i++){
         if (this.hasColConflictAt(i)) {
           conflict = true;
@@ -168,15 +168,18 @@
           var memo = self.attributes[rowIndex][columnIndex];
           return memo + checkPos(rowIndex +1, columnIndex +1);
         };
-      var count = checkPos(0,majorDiagonalColumnIndexAtFirstRow);
-        
-      return (count >= 2) ? true:false;
+        for (var i = 0; i < 2; i++) {
+        var count = checkPos(i,majorDiagonalColumnIndexAtFirstRow);
+        if (count >= 2){
+          return true;
+        }
+      }
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
       //run hamdc on each column
-      var columnCount = this.attributes[0].length;
+      var columnCount = this.attributes.n;
       var conflict = false;
       for(var i = 0; i < columnCount; i++){
         if(this.hasMajorDiagonalConflictAt(i)){
@@ -204,14 +207,19 @@
         var memo = self.attributes[rowIndex][columnIndex];
         return memo + checkPos(rowIndex+1, columnIndex - 1);
       }
+      for (var i = 0; i < 2; i++) {
+      var count = checkPos(i, minorDiagonalColumnIndexAtFirstRow);
+        if(count >= 2){
+          return true; 
+        }
+      }
 
-      var count = checkPos(0, minorDiagonalColumnIndexAtFirstRow);
-      return (count >= 2) ? true:false;
+
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      var columnIndex = this.attributes[0].length -1;
+      var columnIndex = this.attributes.n -1;
       var conflict = false;
       for(var i =columnIndex; i >= 0; i--){
         if(this.hasMinorDiagonalConflictAt(i)){

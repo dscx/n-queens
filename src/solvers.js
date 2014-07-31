@@ -130,8 +130,8 @@ window.findNQueensSolution = function(n) {
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
   var solution = backtrack(new Board({n:n}), n, 'queen');
-  if(n === 3){
-    console.log('n = 3: ', JSON.stringify(solution[0]));
+  if(n === 5){
+    console.log('n = 5: ', JSON.stringify(solution[0]));
   }
   var solutionCount = solution[1];
 
