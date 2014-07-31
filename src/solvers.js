@@ -15,7 +15,6 @@
 window.backtrack = function(board, n, piece){
   var solved = [];
   //n = total pieces
-
   var results = {};
   var cursed = function(depth, n){
   //base case - no more rooks to place
@@ -34,15 +33,14 @@ window.backtrack = function(board, n, piece){
 
          for (var i = 0; i < board.attributes.n; i++) {
              matrix.push(board.attributes[i].slice());
+             console.log(matrix, "line 37");
          }
-        
+        console.log(matrix, "line 39");
          solved.push(matrix);
       }
-
       return;
     }
-
-    for(var i=0; i < board.attributes[depth].length; i++){ //changed from board.attributed[depth].n
+    for(var i=0; i < board.attributes.n; i++){ //changed from board.attributed[depth].n
     //check for conflicts @ column [i]
       queenCheck = true;
       if(piece === 'queen'){

@@ -168,7 +168,7 @@
           var memo = self.attributes[rowIndex][columnIndex];
           return memo + checkPos(rowIndex +1, columnIndex +1);
         };
-        for (var i = 0; i < 2; i++) {
+        for (var i = 0; i < this.attributes.n; i++) {
         var count = checkPos(i,majorDiagonalColumnIndexAtFirstRow);
         if (count >= 2){
           return true;
@@ -207,7 +207,7 @@
         var memo = self.attributes[rowIndex][columnIndex];
         return memo + checkPos(rowIndex+1, columnIndex - 1);
       }
-      for (var i = 0; i < 2; i++) {
+      for (var i = 0; i < this.attributes.n; i++) {
       var count = checkPos(i, minorDiagonalColumnIndexAtFirstRow);
         if(count >= 2){
           return true; 
