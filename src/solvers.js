@@ -21,8 +21,6 @@ window.backtrack = function(board, n, piece){
     var queenCheck; //checks if tests for queens passed
     if (n === 0) { 
       var matrix = [];
-      //iterate over board.attributes
-      //slice each row, and push into matrix
       queenCheck = true;
       if(piece === 'queen'){
         var conflict;
@@ -38,8 +36,8 @@ window.backtrack = function(board, n, piece){
       }
       return;
     }
+    
     for(var i=0; i < board.attributes.n; i++){ //changed from board.attributed[depth].n
-    //check for conflicts @ column [i]
       queenCheck = true;
       board.attributes[depth][i] = 1;
       if(piece === 'queen'){
@@ -48,11 +46,8 @@ window.backtrack = function(board, n, piece){
         queenCheck = (conflict) ? false:true;
       }
       if(!board.hasColConflictAt(i) &&queenCheck){ 
-        //if false (no conflicts)
-        //set rook to this location board[depth][i]
-        //recurse, need to go one level deeper
+    
         cursed(depth+1,n-1);
-        //set board[depth][i] back to 0        
       }
       board.attributes[depth][i] = 0;
     }
